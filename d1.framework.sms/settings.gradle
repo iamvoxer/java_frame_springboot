@@ -1,0 +1,3 @@
+rootProject.name = 'smssample'
+include 'sms'
+

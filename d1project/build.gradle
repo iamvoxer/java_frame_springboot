@@ -1,0 +1,34 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.4.RELEASE' //目前统一2.0.4版本
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'd1.project'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven{ url 'http://你的nexus库地址/repository/d1-java/'}//我们的私有maven库
+}
+
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile ('d1.framework:webapi:1.2.7')//基础封装库，必须依赖,最新版本号参考http://git库地址:8888/java-packages/d1.framework.webapi
+    runtime('mysql:mysql-connector-java')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+}

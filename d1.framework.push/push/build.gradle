@@ -1,0 +1,43 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+version = '1.0.0'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url 'http://你的nexus库地址/repository/d1-java/' }
+}
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+dependencies {
+    compile('cn.jpush.api:jpush-client:3.3.9')
+}
+//Maven仓库的URL
+def MAVEN_REPO_RELEASE_URL = 'http://你的nexus库地址/repository/d1-java/'
+//登录nexus ossde的用户名
+def NEXUS_USERNAME = 'xxxxxx'
+//登录nexus oss的密码
+def NEXUS_PASSWORD = '123456'
+def ARTIFACT_ID = 'push'
+def GROUP_ID = 'd1.framework'
+// type
+def TYPE = 'jar'
+//description
+def DESCRIPTION = '推送相关，目前只要jpush，使用说明参考http://git库地址:8888/java-packages/d1.framework.push'
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_REPO_RELEASE_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            pom.project {
+                version version
+                artifactId ARTIFACT_ID
+                groupId GROUP_ID
+                packaging TYPE
+                description DESCRIPTION
+            }
+        }
+    }
+}

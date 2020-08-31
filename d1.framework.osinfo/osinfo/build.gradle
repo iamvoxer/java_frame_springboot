@@ -1,0 +1,45 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+version='1.0.4'
+sourceCompatibility = 1.8
+
+repositories {
+    maven{ url 'http://maven.aliyun.com/nexus/content/groups/public'}
+    maven{ url 'http://我们内部的库地址/repository/d1-java/'}
+    mavenCentral()
+   
+}
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+dependencies {
+    compile 'org.fusesource:sigar:1.6.4'
+}
+//Maven仓库的URL
+def MAVEN_REPO_RELEASE_URL= 'http://我们内部的库地址/repository/d1-java/'
+//登录nexus ossde的用户名
+def NEXUS_USERNAME='用户名'
+//登录nexus oss的密码
+def NEXUS_PASSWORD='用户密码'
+def ARTIFACT_ID = 'osinfo'
+def GROUP_ID = 'd1.framework'
+// type
+def TYPE = 'jar'
+//description
+def DESCRIPTION = '系统信息相关'
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_REPO_RELEASE_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            pom.project {
+                version version
+                artifactId ARTIFACT_ID
+                groupId GROUP_ID
+                packaging TYPE
+                description DESCRIPTION
+            }
+        }
+    }
+}

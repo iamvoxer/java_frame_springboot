@@ -1,0 +1,45 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+version = '1.0.12'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+dependencies {
+    compile('com.squareup.okhttp3:okhttp:3.11.0')
+    compile('com.alibaba:fastjson:1.2.16')
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.11'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+}
+//Maven仓库的URL
+def MAVEN_REPO_RELEASE_URL = 'http://你的nexus库地址/repository/d1-java/'
+//登录nexus ossde的用户名
+def NEXUS_USERNAME = 'xxxxxx'
+//登录nexus oss的密码
+def NEXUS_PASSWORD = '123456'
+def ARTIFACT_ID = 'util'
+def GROUP_ID = 'd1.framework'
+// type
+def TYPE = 'jar'
+//description
+def DESCRIPTION = '工具类汇集，包括http，string，常用算法等等，使用说明参考http://git库地址:8888/java-packages/d1.framework.util'
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_REPO_RELEASE_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            pom.project {
+                version version
+                artifactId ARTIFACT_ID
+                groupId GROUP_ID
+                packaging TYPE
+                description DESCRIPTION
+            }
+        }
+    }
+}
